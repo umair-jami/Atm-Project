@@ -2,56 +2,82 @@
 
 import inquirer from "inquirer";
 
-let myBalance = 10000; // Dollar
-let myPin = 1234;
+let pinNumber:Number= 1999;
+let totalBalance=10000
 
-let answer = await inquirer.prompt([
-  {
-    name: "pin",
-    message: "Enter Your Pin:",
-    type: "number"
-  }
-]);
-
-if (answer.pin === myPin) {
-  console.log("Correct pin code!!!");
-  let operationAns = await inquirer.prompt([
+let pinEnterd =await inquirer.prompt(
+  [
     {
-      name: "operation",
-      message: "Please select an option",
-      type: "list",
-      choices: ["Withdraw", "Check Balance"]
+      name:"pin",
+      message:"Enter your pin number",
+      type:"number"
     }
-  ]);
-  if (operationAns.operation === "Withdraw") {
-    let amountAns = await inquirer.prompt([
+  ]
+)
+//condition
+if(pinEnterd.pin===pinNumber){
+  let atmQuestion=await inquirer.prompt(
+    [
       {
-        name: "amountType",
-        message: "Select an amount option",
-        type: "list",
-        choices: ["$1000", "$2000", "$5000", "Other"]
+        name:"accountType",
+        message:"select your account type",
+        type:"list",
+        choices:[
+          "Current account",
+          "Saving account"
+        ]
       },
       {
-        name: "customAmount",
-        message: "Enter your amount",
-        type: "number",
-        when: (answers) => answers.amountType === "Other"
+        name:"transMethod",
+        message:"select your transection type",
+        type:"list",
+        choices:[
+          "cash",
+          "fastCash"
+        ]
+
       }
-    ]);
-    let withdrawAmount =
-      amountAns.amountType === "Other"
-        ? amountAns.customAmount
-        : parseInt(amountAns.amountType.substring(1)); 
-    myBalance -= withdrawAmount;
-    if (withdrawAmount <= myBalance) {
-      console.log(`Your remaining balance is ${myBalance}`);
-    } else {
-      console.log("Insufficient Balance");
+    ]
+  );
+  if(atmQuestion.transMethod==="cash")
+  {
+    let cashWithDrwalAmount=await inquirer.prompt(
+      [
+        {
+          name:"withdrawl",
+          message:"Enter your withdrawl amount",
+          type:"number"
+        }
+      ]
+    )
+    if(totalBalance>=cashWithDrwalAmount.withdrawl){
+      totalBalance-=cashWithDrwalAmount.withdrawl
+      console.log(`Your total balance is ${totalBalance}`)
+    }else{
+      console.log("Insuficient balance")
+    }
+  }else{
+    let fastCashAmount=await inquirer.prompt(
+      [
+        {
+          name:"fastCash",
+          message:"Select fastCash amount",
+          type:"list",
+          choices:[
+            "1000",
+            "2000",
+            "5000"
+          ]
+        }
+      ]
+    )
+    if(totalBalance>=fastCashAmount.fastCash){
+      totalBalance-=fastCashAmount.fastCash
+      console.log(`Your total balance is ${totalBalance}`)
+    }else{
+      console.log("Insuficient balance")
     }
   }
-  if (operationAns.operation === "Check Balance") {
-    console.log(`Your current balance is ${myBalance}`);
-  }
-} else {
-  console.log("Incorrect pin number");
+}else{
+  console.log("Enter correct Pin!!!!")
 }

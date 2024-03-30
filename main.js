@@ -1,54 +1,74 @@
 #! /usr/bin/env node
 import inquirer from "inquirer";
-let myBalance = 10000; // Dollar
-let myPin = 1234;
-let answer = await inquirer.prompt([
+let pinNumber = 1999;
+let totalBalance = 10000;
+let pinEnterd = await inquirer.prompt([
     {
         name: "pin",
-        message: "Enter Your Pin:",
+        message: "Enter your pin number",
         type: "number"
     }
 ]);
-if (answer.pin === myPin) {
-    console.log("Correct pin code!!!");
-    let operationAns = await inquirer.prompt([
+//condition
+if (pinEnterd.pin === pinNumber) {
+    let atmQuestion = await inquirer.prompt([
         {
-            name: "operation",
-            message: "Please select an option",
+            name: "accountType",
+            message: "select your account type",
             type: "list",
-            choices: ["Withdraw", "Check Balance"]
+            choices: [
+                "Current account",
+                "Saving account"
+            ]
+        },
+        {
+            name: "transMethod",
+            message: "select your transection type",
+            type: "list",
+            choices: [
+                "cash",
+                "fastCash"
+            ]
         }
     ]);
-    if (operationAns.operation === "Withdraw") {
-        let amountAns = await inquirer.prompt([
+    if (atmQuestion.transMethod === "cash") {
+        let cashWithDrwalAmount = await inquirer.prompt([
             {
-                name: "amountType",
-                message: "Select an amount option",
-                type: "list",
-                choices: ["$1000", "$2000", "$5000", "Other"]
-            },
-            {
-                name: "customAmount",
-                message: "Enter your amount",
-                type: "number",
-                when: (answers) => answers.amountType === "Other"
+                name: "withdrawl",
+                message: "Enter your withdrawl amount",
+                type: "number"
             }
         ]);
-        let withdrawAmount = amountAns.amountType === "Other"
-            ? amountAns.customAmount
-            : parseInt(amountAns.amountType.substring(1));
-        myBalance -= withdrawAmount;
-        if (withdrawAmount <= myBalance) {
-            console.log(`Your remaining balance is ${myBalance}`);
+        if (totalBalance >= cashWithDrwalAmount.withdrawl) {
+            totalBalance -= cashWithDrwalAmount.withdrawl;
+            console.log(`Your total balance is ${totalBalance}`);
         }
         else {
-            console.log("Insufficient Balance");
+            console.log("Insuficient balance");
         }
     }
-    if (operationAns.operation === "Check Balance") {
-        console.log(`Your current balance is ${myBalance}`);
+    else {
+        let fastCashAmount = await inquirer.prompt([
+            {
+                name: "fastCash",
+                message: "Select fastCash amount",
+                type: "list",
+                choices: [
+                    "1000",
+                    "2000",
+                    "5000"
+                ]
+            }
+        ]);
+        if (totalBalance >= fastCashAmount.fastCash) {
+            totalBalance -= fastCashAmount.fastCash;
+            console.log(`Your total balance is ${totalBalance}`);
+        }
+        else {
+            console.log("Insuficient balance");
+        }
     }
 }
 else {
-    console.log("Incorrect pin number");
+    console.log("Enter correct Pin!!!!");
 }
