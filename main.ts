@@ -52,7 +52,7 @@ if(pinEnterd.pin===pinNumber){
     )
     if(totalBalance>=cashWithDrwalAmount.withdrawl){
       totalBalance-=cashWithDrwalAmount.withdrawl
-      console.log(`Your total balance is ${totalBalance}`)
+      console.log(`${cashWithDrwalAmount.withdrawl} is deducted from your account and now Your total balance is ${totalBalance}`)
     }else{
       console.log("Insuficient balance")
     }
