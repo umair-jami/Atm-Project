@@ -73,7 +73,7 @@ if(pinEnterd.pin===pinNumber){
     )
     if(totalBalance>=fastCashAmount.fastCash){
       totalBalance-=fastCashAmount.fastCash
-      console.log(`Your total balance is ${totalBalance}`)
+      console.log(`${fastCashAmount.fastCash} is deducted from your account and now Your total balance is ${totalBalance}`)
     }else{
       console.log("Insuficient balance")
     }
